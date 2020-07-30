@@ -29,13 +29,6 @@ public class Representation {
             pdfData.setPdfName(getPdfFileName());
             pdfData.setPdfStream(streamed.retrieveStream());
             return pdfData;
-//            File targetFile = new File(filePath + getPdfFileName());
-//            try (InputStream initialStream = streamed.retrieveStream();
-//                 OutputStream outStream = new FileOutputStream(targetFile)) {
-//                byte[] buffer = new byte[initialStream.available()];
-//                initialStream.read(buffer);
-//                outStream.write(buffer);
-//            }
         } catch (PropertyVetoException | WTException | NullPointerException | ru.ruselprom.signs.exceptions.NullValueException e) {
             e.printStackTrace();
             return null;
