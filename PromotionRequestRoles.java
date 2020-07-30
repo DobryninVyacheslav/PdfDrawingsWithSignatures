@@ -1,6 +1,7 @@
 package ru.ruselprom.signs;
 
 import com.ptc.netmarkets.workflow.NmWorkflowHelper;
+import wt.epm.EPMDocument;
 import wt.fc.ObjectReference;
 import wt.fc.QueryResult;
 import wt.fc.ReferenceFactory;
@@ -27,7 +28,7 @@ public class PromotionRequestRoles {
         rms.setUserName("wcadmin");
         rms.setPassword("wnc");
 
-        String oid = "VR:wt.epm.EPMDocument:78379795";
+        String oid = "VR:wt.epm.EPMDocument:79810893";
 
         PromotionRequestRoles promotionRequestRoles = new PromotionRequestRoles();
 
@@ -70,9 +71,6 @@ public class PromotionRequestRoles {
                             System.out.println("Promotion notice" + curPN.getNumber() + " time: " + curTime);
                             continue label41;
                         }
-
-                        //System.out.println("Type undefined: " + obj2.toString());
-                        //System.out.println("Obj class: " + obj2.getClass().toString());
                     }
 
                     if (curMaxTime != null) {
@@ -113,12 +111,6 @@ public class PromotionRequestRoles {
     }
 
     public void getPromotionRoles(PromotionNotice pn){
-//        PromotionNotice pn = null;
-//        try {
-//            pn = (PromotionNotice) new ReferenceFactory().getReference("wt.maturity.PromotionNotice:79814733").getObject();
-//        } catch (WTException e) {
-//            e.printStackTrace();
-//        }
         WfProcess process = getProcessForPromotionNotice(pn);
         System.out.println("Process template: " + process.getTemplate().getName());
 
@@ -140,7 +132,5 @@ public class PromotionRequestRoles {
         } catch (WTException var21) {
             var21.printStackTrace();
         }
-
-        //System.out.println("End search");
     }
 }
