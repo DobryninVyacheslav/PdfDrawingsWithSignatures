@@ -18,20 +18,22 @@ public class Representation {
 
     private Representation() {}
 
-    public static void saveToPdf(String oid, String filePath) {
+    public static InputStream getPdfByOidOfDrw(String oid) {
         try {
             persDrw = getObjectByOid(oid);
-            File targetFile = new File(filePath + getPdfFileName());
             ApplicationData pdfAppData = getPdfAppData(getRelatedObjName());
             Streamed streamed = (Streamed) pdfAppData.getStreamData().getObject();
-            try (InputStream initialStream = streamed.retrieveStream();
-                 OutputStream outStream = new FileOutputStream(targetFile)) {
-                byte[] buffer = new byte[initialStream.available()];
-                initialStream.read(buffer);
-                outStream.write(buffer);
-            }
-        } catch (IOException | PropertyVetoException | WTException | NullPointerException | NullValueException e) {
+            return streamed.retrieveStream();
+//            File targetFile = new File(filePath + getPdfFileName());
+//            try (InputStream initialStream = streamed.retrieveStream();
+//                 OutputStream outStream = new FileOutputStream(targetFile)) {
+//                byte[] buffer = new byte[initialStream.available()];
+//                initialStream.read(buffer);
+//                outStream.write(buffer);
+//            }
+        } catch (PropertyVetoException | WTException | NullPointerException | NullValueException e) {
             e.printStackTrace();
+            return null;
         }
     }
 

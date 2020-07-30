@@ -41,6 +41,8 @@ public class PromotionRequestRoles {
         PromotionRequestRoles promotionRequestRoles = new PromotionRequestRoles();
         promotionRequestRoles.getPromotionRoles(oid);
         System.out.println(promotionRequestRoles.userData.getDates());
+        System.out.println(promotionRequestRoles.userData.getRoles());
+        System.out.println(promotionRequestRoles.userData.getUsers());
     }
 
     public void getPromotionRoles(String oid){
