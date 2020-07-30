@@ -20,20 +20,50 @@ import wt.workflow.engine.WfProcess;
 import wt.workflow.engine.WfVotingEventAudit;
 
 import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
 public class PromotionRequestRoles {
+
+    private UserData userData;
+
+    public PromotionRequestRoles() {
+        this.userData = new UserData();
+    }
+
     public static void main(String[] args) throws  WTException {
         RemoteMethodServer rms = RemoteMethodServer.getDefault();
-        rms.setUserName("wcadmin");
-        rms.setPassword("wnc");
+        rms.setUserName("Slava");
+        rms.setPassword("kek");
 
-        String oid = "VR:wt.epm.EPMDocument:79810893";
+        String oid = "VR:wt.epm.EPMDocument:1122235";
 
         PromotionRequestRoles promotionRequestRoles = new PromotionRequestRoles();
+        promotionRequestRoles.getPromotionRoles(oid);
+        System.out.println(promotionRequestRoles.userData.getDates());
+    }
 
-        PromotionNotice pn = promotionRequestRoles.getPromotionNotice(oid);
-        promotionRequestRoles.getPromotionRoles(pn);
+    public void getPromotionRoles(String oid){
+        try {
+            PromotionNotice pn = getPromotionNotice(oid);
+            WfProcess process = getProcessForPromotionNotice(pn);
+
+            WTCollection localWTCollection;
+            localWTCollection = WfEngineHelper.service.getVotingEvents(process, null, null, null);
+            Iterator it = localWTCollection.persistableIterator();
+
+            while(it.hasNext()) {
+                WfVotingEventAudit ea = (WfVotingEventAudit)it.next();
+                userData.addDate(ea.getCreateTimestamp().toLocalDateTime().toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yy")));
+                userData.addRole(ea.getActivityName());
+                WTPrincipal principal = (WTPrincipal)ea.getUserRef().getObject();
+                if (principal instanceof WTUser) {
+                    userData.addUser(((WTUser)principal).getFullName());
+                }
+            }
+        } catch (WTException e) {
+            e.printStackTrace();
+        }
     }
 
     public PromotionNotice getPromotionNotice(String oid) throws WTException {
@@ -68,17 +98,9 @@ public class PromotionRequestRoles {
                         if (obj2 instanceof PromotionNotice) {
                             curPN = (PromotionNotice) obj2;
                             curTime = curPN.getPromotionDate();
-                            System.out.println("Promotion notice" + curPN.getNumber() + " time: " + curTime);
                             continue label41;
                         }
                     }
-
-                    if (curMaxTime != null) {
-                        System.out.println("Max time: " + curMaxTime.toString());
-                    }
-
-                    System.out.println("curTime is " + curMaxTime);
-                    System.out.println(pn);
                     return pn;
                 } while (curTime == null);
             } while (curMaxTime != null && !curTime.after(curMaxTime));
@@ -99,38 +121,13 @@ public class PromotionRequestRoles {
                 Object obj = qr.nextElement();
                 if (obj instanceof WfProcess) {
                     process = (WfProcess)obj;
-                    System.out.println("Process state: " + ((WfProcess)obj).getState().toString());
                 }
             }
 
             return process;
-        } catch (WTException var5) {
-            var5.printStackTrace();
+        } catch (WTException e) {
+            e.printStackTrace();
             return null;
-        }
-    }
-
-    public void getPromotionRoles(PromotionNotice pn){
-        WfProcess process = getProcessForPromotionNotice(pn);
-        System.out.println("Process template: " + process.getTemplate().getName());
-
-        WTCollection localWTCollection;
-
-        try {
-            localWTCollection = WfEngineHelper.service.getVotingEvents(process, null, null, null);
-            Iterator it = localWTCollection.persistableIterator();
-
-            while(it.hasNext()) {
-                WfVotingEventAudit ea = (WfVotingEventAudit)it.next();
-                System.out.println("\nTime: " + ea.getCreateTimestamp());
-                System.out.println("Role: " + ea.getActivityName());
-                WTPrincipal principal = (WTPrincipal)ea.getUserRef().getObject();
-                if (principal instanceof WTUser) {
-                    System.out.println("User: " + ((WTUser)principal).getFullName());
-                }
-            }
-        } catch (WTException var21) {
-            var21.printStackTrace();
         }
     }
 }
