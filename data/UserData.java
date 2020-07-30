@@ -1,4 +1,4 @@
-package ru.ruselprom.signs;
+package ru.ruselprom.signs.data;
 
 import java.util.ArrayList;
 import java.util.List;

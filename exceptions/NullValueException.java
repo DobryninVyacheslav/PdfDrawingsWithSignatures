@@ -1,4 +1,4 @@
-package ru.ruselprom.signs;
+package ru.ruselprom.signs.exceptions;
 
 public class NullValueException extends Exception {
     public NullValueException() {

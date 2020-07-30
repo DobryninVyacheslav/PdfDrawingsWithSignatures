@@ -1,5 +1,7 @@
 package ru.ruselprom.signs;
 
+import ru.ruselprom.signs.data.PdfData;
+import ru.ruselprom.signs.exceptions.NullValueException;
 import wt.content.*;
 import wt.epm.EPMDocument;
 import wt.fc.Persistable;
@@ -9,7 +11,6 @@ import wt.util.WTException;
 import wt.wvs.WVSLoggerHelper;
 
 import java.beans.PropertyVetoException;
-import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,12 +19,16 @@ public class Representation {
 
     private Representation() {}
 
-    public static InputStream getPdfByOidOfDrw(String oid) {
+    public static PdfData getPdfDataByOidOfDrw(String oid) {
         try {
             persDrw = getObjectByOid(oid);
             ApplicationData pdfAppData = getPdfAppData(getRelatedObjName());
             Streamed streamed = (Streamed) pdfAppData.getStreamData().getObject();
-            return streamed.retrieveStream();
+
+            PdfData pdfData = new PdfData();
+            pdfData.setPdfName(getPdfFileName());
+            pdfData.setPdfStream(streamed.retrieveStream());
+            return pdfData;
 //            File targetFile = new File(filePath + getPdfFileName());
 //            try (InputStream initialStream = streamed.retrieveStream();
 //                 OutputStream outStream = new FileOutputStream(targetFile)) {
@@ -31,7 +36,7 @@ public class Representation {
 //                initialStream.read(buffer);
 //                outStream.write(buffer);
 //            }
-        } catch (PropertyVetoException | WTException | NullPointerException | NullValueException e) {
+        } catch (PropertyVetoException | WTException | NullPointerException | ru.ruselprom.signs.exceptions.NullValueException e) {
             e.printStackTrace();
             return null;
         }
@@ -61,7 +66,7 @@ public class Representation {
         return objName.substring(objName.indexOf('(') + 1, objName.indexOf(')'));
     }
 
-    private static ApplicationData getPdfAppData(String oid) throws WTException, PropertyVetoException, NullValueException {
+    private static ApplicationData getPdfAppData(String oid) throws WTException, PropertyVetoException, ru.ruselprom.signs.exceptions.NullValueException {
         Persistable persRepresentation = getObjectByOid(oid);
         FormatContentHolder holder = (FormatContentHolder)
                 ContentHelper.service.getContents((ContentHolder) persRepresentation);
