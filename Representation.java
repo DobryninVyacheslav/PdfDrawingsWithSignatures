@@ -17,7 +17,7 @@ public class Representation {
     private static Persistable persDrw;
 
     private Representation() {}
-
+//
     public static void saveToPdf(String oid, String filePath) {
         try {
             persDrw = getObjectByOid(oid);
