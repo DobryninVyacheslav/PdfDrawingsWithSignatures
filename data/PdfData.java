@@ -4,6 +4,16 @@ import java.io.InputStream;
 
 public class PdfData {
     private String pdfName;
+    private String pdfPath;
+
+    public String getPdfPath() {
+        return pdfPath;
+    }
+
+    public void setPdfPath(String pdfPath) {
+        this.pdfPath = pdfPath;
+    }
+
     private InputStream pdfStream;
 
     public String getPdfName() {

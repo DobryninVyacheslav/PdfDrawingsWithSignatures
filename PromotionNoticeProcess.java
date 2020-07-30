@@ -25,20 +25,6 @@ import java.util.Iterator;
 
 public class PromotionNoticeProcess {
 
-    public static void main(String[] args) {
-        RemoteMethodServer rms = RemoteMethodServer.getDefault();
-        rms.setUserName("Slava");
-        rms.setPassword("kek");
-
-        String oid = "VR:wt.epm.EPMDocument:1122235";
-
-        PromotionNoticeProcess promotionNoticeProcess = new PromotionNoticeProcess();
-        UserData userData = promotionNoticeProcess.getUserDataByOidOfDrw(oid);
-        System.out.println(userData.getDates());
-        System.out.println(userData.getRoles());
-        System.out.println(userData.getUsers());
-    }
-
     public UserData getUserDataByOidOfDrw(String oid){
         try {
             UserData userData = new UserData();
