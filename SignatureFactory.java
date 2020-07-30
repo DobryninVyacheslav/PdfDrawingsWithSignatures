@@ -15,20 +15,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class SignatureInPdf {
+public class SignatureFactory {
     private static final String BASE_FONT = "C:\\ptc\\Windchill_11.1cps05\\eclipse\\fonts\\GOST type A.ttf";
     private static final String SINGS_PATH = "C:\\ptc\\Windchill_11.1cps05\\Windchill\\codebase\\netmarkets\\images\\sings\\";
     private List<String> roles;
     private List<String> users;
     private List<String> dates;
 
-    public SignatureInPdf(UserData userData) {
+    public SignatureFactory(UserData userData) {
         this.roles = userData.getRoles();
         this.users = userData.getUsers();
         this.dates = userData.getDates();
     }
 
-    public String signTheDocument(PdfData pdfData) throws IOException, DocumentException {
+    public String signPdfDocument(PdfData pdfData) throws IOException, DocumentException {
         PdfReader reader = null;
         PdfStamper stamper = null;
         try {

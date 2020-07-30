@@ -13,8 +13,8 @@ public class SignsApp {
             UserData userData = process.getUserDataByOidOfDrw(oid);
             PdfData pdfData = Representation.getPdfDataByOidOfDrw(oid);
             pdfData.setPdfPath(filePath);
-            SignatureInPdf signatureInPdf = new SignatureInPdf(userData);
-            return signatureInPdf.signTheDocument(pdfData);
+            SignatureFactory signatureInPdf = new SignatureFactory(userData);
+            return signatureInPdf.signPdfDocument(pdfData);
         } catch (DocumentException e) {
             return e.toString();
         } catch (IOException e) {
