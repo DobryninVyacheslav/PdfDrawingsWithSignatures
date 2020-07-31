@@ -32,11 +32,9 @@ public class WncDrawing {
     private void checkLifeCycleState() {
         EPMDocument epmDrawing = ((EPMDocument)drawing);
         String state = epmDrawing.getLifeCycleState().getDisplay();
-        if (state.equalsIgnoreCase("APPROVED") ||
-            state.equalsIgnoreCase("RELEASED") ||
-            state.equalsIgnoreCase("CANCELLED")) {
-            return;
-        } else {
+        if (!state.equalsIgnoreCase("APPROVED") &&
+            !state.equalsIgnoreCase("RELEASED") &&
+            !state.equalsIgnoreCase("CANCELED")) {
             throw new SignaturesAppRuntimeException("Чертеж(ы) не подписаны!");
         }
     }
