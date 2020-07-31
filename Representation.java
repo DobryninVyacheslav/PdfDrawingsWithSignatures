@@ -48,9 +48,10 @@ public class Representation {
             number = number.substring(0, matcher.start());
         }
         StringBuilder pdfFileName = new StringBuilder();
-        pdfFileName.append(number).append(" ").append(suffix).append(epmDoc.getName().trim()).
-                append("_r").append(epmDoc.getVersionIdentifier().getValue()).
-                append(epmDoc.getIterationIdentifier().getValue()).append(".pdf");
+        pdfFileName.append(number).append(" ").append(suffix)
+                .append(epmDoc.getName().trim()).append("_r")
+                .append(String.format("%02d", epmDoc.getVersionIdentifier().getValue()))
+                .append(".pdf");
         return pdfFileName.toString();
     }
 

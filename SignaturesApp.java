@@ -6,7 +6,7 @@ import ru.ruselprom.signs.data.UserData;
 
 import java.io.IOException;
 
-public class SignsApp {
+public class SignaturesApp {
     public String start(String oid, String filePath) {
         try {
             PromotionNoticeProcess process = new PromotionNoticeProcess();
