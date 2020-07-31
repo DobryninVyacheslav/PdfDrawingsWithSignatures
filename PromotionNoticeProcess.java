@@ -112,7 +112,9 @@ public class PromotionNoticeProcess {
 
     private String getCreateDate(WTObject wtObject) throws NullValueException {
         if (wtObject == null) {
-            throw new NullValueException("wtObject is null");
+            if (wtObject instanceof PromotionNotice) throw new NullValueException("PromotionNotice is null");
+            else if (wtObject instanceof WfVotingEventAudit) throw new NullValueException("VotingEvent is null");
+            else throw new NullValueException("wtObject is null");
         } else {
             return wtObject.getCreateTimestamp().toLocalDateTime()
                     .toLocalDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
