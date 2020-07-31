@@ -31,17 +31,18 @@ public class SignatureFactory {
     public String signPdfDocument(PdfData pdfData) throws IOException, DocumentException {
         PdfReader reader = null;
         PdfStamper stamper = null;
-        try {
+        try (FileOutputStream fileOutputStream =
+                     new FileOutputStream(pdfData.getPdfPath() + File.separator + pdfData.getPdfName())) {
             reader = new PdfReader(pdfData.getPdfStream());
-            stamper = new PdfStamper(reader,
-                    new FileOutputStream(pdfData.getPdfPath() + File.separator + pdfData.getPdfName()));
+            stamper = new PdfStamper(reader, fileOutputStream);
 
             PdfContentByte stream = stamper.getOverContent(1);
             stream.beginText();
             BaseFont bf = BaseFont.createFont(BASE_FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Rectangle pageSize = reader.getPageSize(1);
 
-            float x, y;
+            float x;
+            float y;
             int userPosition;
             for (int i = 0; i < 5; i++) {
                 userPosition = getPositionRole(roles, i);
@@ -68,8 +69,12 @@ public class SignatureFactory {
         } catch (IOException | DocumentException e) {
             return e.toString();
         } finally {
-            stamper.close();
-            reader.close();
+            if (stamper != null) {
+                stamper.close();
+            }
+            if (reader != null) {
+                reader.close();
+            }
         }
     }
 

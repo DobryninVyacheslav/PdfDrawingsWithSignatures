@@ -3,6 +3,7 @@ package ru.ruselprom.signs;
 import com.ptc.netmarkets.workflow.NmWorkflowHelper;
 import ru.ruselprom.signs.data.UserData;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
+import ru.ruselprom.signs.exceptions.NullValueException;
 import wt.fc.ObjectReference;
 import wt.fc.QueryResult;
 import wt.fc.ReferenceFactory;
@@ -13,7 +14,6 @@ import wt.fc.collections.WTHashSet;
 import wt.maturity.MaturityHelper;
 import wt.maturity.Promotable;
 import wt.maturity.PromotionNotice;
-import wt.method.RemoteMethodServer;
 import wt.org.WTPrincipal;
 import wt.org.WTUser;
 import wt.util.WTException;
@@ -29,18 +29,6 @@ public class PromotionNoticeProcess {
 
     public static final String DEV_ROLE = "Разработчик";
     public static final String DATE_FORMAT = "dd.MM.yy";
-
-//    public static void main(String[] args) throws NullValueException {
-//        RemoteMethodServer rms = RemoteMethodServer.getDefault();
-//        rms.setUserName("Slava");
-//        rms.setPassword("kek");
-//        PromotionNoticeProcess process = new PromotionNoticeProcess();
-//        PromotionNotice pn = process.getPromotionNotice("VR:wt.epm.EPMDocument:1137873");
-//        UserData userData = process.getUserDataByOidOfDrw("VR:wt.epm.EPMDocument:1137873");
-//        System.out.println(userData.getUsers());
-//        System.out.println(userData.getDates());
-//        System.out.println(userData.getRoles());
-//    }
 
     public UserData getUserDataByOidOfDrw(String oid) throws NullValueException{
         try {

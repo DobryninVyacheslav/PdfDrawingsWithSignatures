@@ -1,7 +1,6 @@
 package ru.ruselprom.signs;
 
 import ru.ruselprom.signs.data.PdfData;
-import ru.ruselprom.signs.exceptions.NullValueException;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
 import wt.content.*;
 import wt.fc.Persistable;
@@ -14,11 +13,11 @@ import java.beans.PropertyVetoException;
 public class Representation {
 
     private WncDrawing drawing;
-    private Persistable representation;
+    private Persistable persRepresentation;
 
     public Representation(WncDrawing drawing) {
         this.drawing = drawing;
-        this.representation = getRepresentationByOid(drawing.getRepresentationOid());
+        this.persRepresentation = getRepresentationByOid(drawing.getRepresentationOid());
     }
 
     public PdfData getDrwPdfData() {
@@ -37,7 +36,7 @@ public class Representation {
 
     private ApplicationData getPdfAppData() throws WTException, PropertyVetoException {
         FormatContentHolder holder = (FormatContentHolder)ContentHelper
-                .service.getContents((ContentHolder) representation);
+                .service.getContents((ContentHolder) persRepresentation);
         QueryResult result = ContentHelper.service
                 .getContentsByRole(holder, ContentRoleType.SECONDARY, false);
         ApplicationData data = null;

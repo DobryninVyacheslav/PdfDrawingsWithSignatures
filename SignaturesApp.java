@@ -3,7 +3,9 @@ package ru.ruselprom.signs;
 import com.lowagie.text.DocumentException;
 import ru.ruselprom.signs.data.PdfData;
 import ru.ruselprom.signs.data.UserData;
+import ru.ruselprom.signs.exceptions.NullValueException;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
+
 
 import java.io.IOException;
 
@@ -18,11 +20,7 @@ public class SignaturesApp {
             UserData userData = process.getUserDataByOidOfDrw(oid);
             SignatureFactory signatureInPdf = new SignatureFactory(userData);
             return signatureInPdf.signPdfDocument(pdfData);
-        } catch (DocumentException | NullValueException e) {
-            return e.toString();
-        } catch (IOException e) {
-            return e.toString();
-        } catch (SignaturesAppRuntimeException e) {
+        } catch (DocumentException | NullValueException | IOException | SignaturesAppRuntimeException e) {
             return e.toString();
         }
     }
