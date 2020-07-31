@@ -4,6 +4,7 @@ import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
 import wt.epm.EPMDocument;
 import wt.fc.Persistable;
 import wt.fc.ReferenceFactory;
+import wt.method.RemoteMethodServer;
 import wt.util.WTException;
 import wt.wvs.WVSLoggerHelper;
 
@@ -16,6 +17,28 @@ public class WncDrawing {
 
     public WncDrawing(String oid) {
         this.drawing = getDrawingByOid(oid);
+        checkLifeCycleState();
+    }
+
+//    public static void main(String[] args) {
+//        RemoteMethodServer rms = RemoteMethodServer.getDefault();
+//        rms.setUserName("Slava");
+//        rms.setPassword("kek");
+//        WncDrawing wncDrawing = new WncDrawing("VR:wt.epm.EPMDocument:1125425");
+//        EPMDocument epmDocument = ((EPMDocument)wncDrawing.drawing);
+//        System.out.println(epmDocument.getLifeCycleState().getDisplay());//APPROVED//RELEASED//CANCELLED
+//    }
+
+    private void checkLifeCycleState() {
+        EPMDocument epmDrawing = ((EPMDocument)drawing);
+        String state = epmDrawing.getLifeCycleState().getDisplay();
+        if (state.equalsIgnoreCase("APPROVED") ||
+            state.equalsIgnoreCase("RELEASED") ||
+            state.equalsIgnoreCase("CANCELLED")) {
+            return;
+        } else {
+            throw new SignaturesAppRuntimeException("Чертеж(ы) не подписаны!");
+        }
     }
 
     public String getRepresentationOid() {
