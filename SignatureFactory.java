@@ -31,10 +31,10 @@ public class SignatureFactory {
     public String signPdfDocument(PdfData pdfData) throws IOException, DocumentException {
         PdfReader reader = null;
         PdfStamper stamper = null;
-        try (FileOutputStream fileOutputStream =
-                     new FileOutputStream(pdfData.getPdfPath() + File.separator + pdfData.getPdfName())) {
+        try {
             reader = new PdfReader(pdfData.getPdfStream());
-            stamper = new PdfStamper(reader, fileOutputStream);
+            stamper = new PdfStamper(reader,
+                    new FileOutputStream(pdfData.getPdfPath() + File.separator + pdfData.getPdfName()));
 
             PdfContentByte stream = stamper.getOverContent(1);
             stream.beginText();
