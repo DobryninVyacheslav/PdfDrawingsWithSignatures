@@ -12,10 +12,10 @@ public class SignaturesApp {
         try {
             WncDrawing drawing = new WncDrawing(oid);
             Representation representation = new Representation(drawing);
-            PromotionNoticeProcess process = new PromotionNoticeProcess();
-            UserData userData = process.getUserDataByOidOfDrw(oid);
             PdfData pdfData = representation.getDrwPdfData();
             pdfData.setPdfPath(filePath);
+            PromotionNoticeProcess process = new PromotionNoticeProcess();
+            UserData userData = process.getUserDataByOidOfDrw(oid);
             SignatureFactory signatureInPdf = new SignatureFactory(userData);
             return signatureInPdf.signPdfDocument(pdfData);
         } catch (DocumentException e) {

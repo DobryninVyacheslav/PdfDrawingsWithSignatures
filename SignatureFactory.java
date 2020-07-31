@@ -80,7 +80,7 @@ public class SignatureFactory {
 
     private int getPositionRole(List<String> roles, int i) {
         final String[] allRoles = new String[]{
-                "Назначить согласующих технологов",
+                PromotionNoticeProcess.DEV_ROLE,
                 "Проверить",
                 "Согласовать",
                 "Нормоконтроль",

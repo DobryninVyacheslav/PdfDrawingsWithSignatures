@@ -2,15 +2,18 @@ package ru.ruselprom.signs;
 
 import com.ptc.netmarkets.workflow.NmWorkflowHelper;
 import ru.ruselprom.signs.data.UserData;
+import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
 import wt.fc.ObjectReference;
 import wt.fc.QueryResult;
 import wt.fc.ReferenceFactory;
+import wt.fc.WTObject;
 import wt.fc.collections.WTArrayList;
 import wt.fc.collections.WTCollection;
 import wt.fc.collections.WTHashSet;
 import wt.maturity.MaturityHelper;
 import wt.maturity.Promotable;
 import wt.maturity.PromotionNotice;
+import wt.method.RemoteMethodServer;
 import wt.org.WTPrincipal;
 import wt.org.WTUser;
 import wt.util.WTException;
@@ -24,20 +27,39 @@ import java.util.Iterator;
 
 public class PromotionNoticeProcess {
 
+    public static final String DEV_ROLE = "Разработчик";
+    public static final String DATE_FORMAT = "dd.MM.yy";
+
+//    public static void main(String[] args) {
+//        RemoteMethodServer rms = RemoteMethodServer.getDefault();
+//        rms.setUserName("Slava");
+//        rms.setPassword("kek");
+//        PromotionNoticeProcess process = new PromotionNoticeProcess();
+//        PromotionNotice pn = process.getPromotionNotice("VR:wt.epm.EPMDocument:1137873");
+//        UserData userData = process.getUserDataByOidOfDrw("VR:wt.epm.EPMDocument:1137873");
+//        System.out.println(userData.getUsers());
+//        System.out.println(userData.getDates());
+//        System.out.println(userData.getRoles());
+//    }
+
     public UserData getUserDataByOidOfDrw(String oid){
         try {
-            UserData userData = new UserData();
             PromotionNotice pn = getPromotionNotice(oid);
+            UserData userData = new UserData();
+            userData.addRole(DEV_ROLE);
+            userData.addDate(getCreateDate(pn));
+            WTUser author = (WTUser) pn.getCreator().getObject();
+            userData.addUser(author.getFullName());
+
             WfProcess process = getProcessForPromotionNotice(pn);
 
-            WTCollection localWTCollection = WfEngineHelper.service.
-                    getVotingEvents(process, null, null, null);
+            WTCollection localWTCollection = WfEngineHelper.service
+                    .getVotingEvents(process, null, null, null);
             Iterator it = localWTCollection.persistableIterator();
 
             while(it.hasNext()) {
                 WfVotingEventAudit ea = (WfVotingEventAudit)it.next();
-                userData.addDate(ea.getCreateTimestamp().toLocalDateTime().
-                        toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yy")));
+                userData.addDate(getCreateDate(ea));
                 userData.addRole(ea.getActivityName());
                 WTPrincipal principal = (WTPrincipal)ea.getUserRef().getObject();
                 if (principal instanceof WTUser) {
@@ -51,9 +73,18 @@ public class PromotionNoticeProcess {
         }
     }
 
-    private PromotionNotice getPromotionNotice(String oid) throws WTException {
-        Promotable promotable = (Promotable) (new ReferenceFactory()).getReference(oid).getObject();
-        return getPromotionNoticeForPromotable(promotable);
+    private String getCreateDate(WTObject wtObject) {
+        return wtObject.getCreateTimestamp().toLocalDateTime()
+                .toLocalDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+    }
+
+    private PromotionNotice getPromotionNotice(String oid) {
+        try {
+            Promotable promotable = (Promotable) (new ReferenceFactory()).getReference(oid).getObject();
+            return getPromotionNoticeForPromotable(promotable);
+        } catch (WTException e) {
+            throw new SignaturesAppRuntimeException("Error receiving a promotion notice", e);
+        }
     }
 
     private PromotionNotice getPromotionNoticeForPromotable(Promotable obj) throws WTException {
