@@ -18,7 +18,7 @@ public class SignaturesApp {
             UserData userData = process.getUserDataByOidOfDrw(oid);
             SignatureFactory signatureInPdf = new SignatureFactory(userData);
             return signatureInPdf.signPdfDocument(pdfData);
-        } catch (DocumentException e) {
+        } catch (DocumentException | NullValueException e) {
             return e.toString();
         } catch (IOException e) {
             return e.toString();

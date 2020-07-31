@@ -30,7 +30,7 @@ public class PromotionNoticeProcess {
     public static final String DEV_ROLE = "Разработчик";
     public static final String DATE_FORMAT = "dd.MM.yy";
 
-//    public static void main(String[] args) {
+//    public static void main(String[] args) throws NullValueException {
 //        RemoteMethodServer rms = RemoteMethodServer.getDefault();
 //        rms.setUserName("Slava");
 //        rms.setPassword("kek");
@@ -42,7 +42,7 @@ public class PromotionNoticeProcess {
 //        System.out.println(userData.getRoles());
 //    }
 
-    public UserData getUserDataByOidOfDrw(String oid){
+    public UserData getUserDataByOidOfDrw(String oid) throws NullValueException{
         try {
             PromotionNotice pn = getPromotionNotice(oid);
             UserData userData = new UserData();
@@ -71,11 +71,6 @@ public class PromotionNoticeProcess {
             e.printStackTrace();
             return null;
         }
-    }
-
-    private String getCreateDate(WTObject wtObject) {
-        return wtObject.getCreateTimestamp().toLocalDateTime()
-                .toLocalDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
     private PromotionNotice getPromotionNotice(String oid) {
@@ -124,6 +119,15 @@ public class PromotionNoticeProcess {
             pn = curPN;
 
             curMaxTime = curTime;
+        }
+    }
+
+    private String getCreateDate(WTObject wtObject) throws NullValueException {
+        if (wtObject == null) {
+            throw new NullValueException("wtObject is null");
+        } else {
+            return wtObject.getCreateTimestamp().toLocalDateTime()
+                    .toLocalDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
     }
 
