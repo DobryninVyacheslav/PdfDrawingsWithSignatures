@@ -49,7 +49,7 @@ public class WncDrawing {
         StringBuilder pdfFileName = new StringBuilder();
         pdfFileName.append(number).append(" ").append(suffix)
                 .append(epmDoc.getName().trim()).append("_r")
-                .append(String.format("%02d", epmDoc.getVersionIdentifier().getValue()))
+                .append(String.format("%02d", Integer.parseInt(epmDoc.getVersionIdentifier().getValue())))
                 .append(".pdf");
         return pdfFileName.toString();
     }
