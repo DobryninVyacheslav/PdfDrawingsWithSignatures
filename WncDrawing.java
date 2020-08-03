@@ -2,6 +2,7 @@ package ru.ruselprom.signs;
 
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
 import wt.epm.EPMDocument;
+import wt.epm.EPMDocumentType;
 import wt.fc.ReferenceFactory;
 import wt.util.WTException;
 import wt.wvs.WVSLoggerHelper;
@@ -15,6 +16,7 @@ public class WncDrawing {
 
     public WncDrawing(String oid) {
         this.drawing = getDrawingByOid(oid);
+        checkDocType();
         checkLifeCycleState();
     }
 
@@ -23,7 +25,15 @@ public class WncDrawing {
         if (!state.equalsIgnoreCase("APPROVED") &&
             !state.equalsIgnoreCase("RELEASED") &&
             !state.equalsIgnoreCase("CANCELED")) {
-            throw new SignaturesAppRuntimeException("Чертеж(ы) не подписаны!");
+            throw new SignaturesAppRuntimeException("Чертеж(ы) не подписан(ы)!");
+        }
+    }
+
+    private void checkDocType() {
+        EPMDocumentType currentType = drawing.getDocType();
+        EPMDocumentType drawingType = EPMDocumentType.toEPMDocumentType("CADDRAWING");
+        if (currentType != drawingType) {
+            throw new SignaturesAppRuntimeException("Неправильный тип документа. Требуется чертеж!");
         }
     }
 
