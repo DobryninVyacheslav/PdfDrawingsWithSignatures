@@ -34,7 +34,7 @@ public class PromotionNoticeProcess {
         try {
             PromotionNotice pn = getPromotionNotice(oid);
             if (pn == null) {
-                throw new NullValueException("PromotionNotice is null");
+                throw new NullValueException("Утвержденный запрос на продвижение отсутствует!");
             }
             UserData userData = new UserData();
             userData.addRole(DEV_ROLE);
