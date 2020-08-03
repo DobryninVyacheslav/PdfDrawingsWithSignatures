@@ -33,6 +33,9 @@ public class PromotionNoticeProcess {
     public UserData getUserDataByOidOfDrw(String oid) throws NullValueException{
         try {
             PromotionNotice pn = getPromotionNotice(oid);
+            if (pn == null) {
+                throw new NullValueException("PromotionNotice is null");
+            }
             UserData userData = new UserData();
             userData.addRole(DEV_ROLE);
             userData.addDate(getCreateDate(pn));
@@ -112,9 +115,7 @@ public class PromotionNoticeProcess {
 
     private String getCreateDate(WTObject wtObject) throws NullValueException {
         if (wtObject == null) {
-            if (wtObject instanceof PromotionNotice) throw new NullValueException("PromotionNotice is null");
-            else if (wtObject instanceof WfVotingEventAudit) throw new NullValueException("VotingEvent is null");
-            else throw new NullValueException("wtObject is null");
+            throw new NullValueException("VotingEvent is null");
         } else {
             return wtObject.getCreateTimestamp().toLocalDateTime()
                     .toLocalDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
