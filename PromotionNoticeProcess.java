@@ -40,7 +40,7 @@ public class PromotionNoticeProcess {
             userData.addRole(DEV_ROLE);
             userData.addDate(getCreateDate(pn));
             WTUser author = (WTUser) pn.getCreator().getObject();
-            userData.addUser(author.getFullName());
+            userData.addUser(author.getLast());
 
             WfProcess process = getProcessForPromotionNotice(pn);
 
