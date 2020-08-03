@@ -54,7 +54,7 @@ public class PromotionNoticeProcess {
                 userData.addRole(ea.getActivityName());
                 WTPrincipal principal = (WTPrincipal)ea.getUserRef().getObject();
                 if (principal instanceof WTUser) {
-                    userData.addUser(((WTUser)principal).getFullName());
+                    userData.addUser(((WTUser)principal).getLast());
                 }
             }
             return userData;
