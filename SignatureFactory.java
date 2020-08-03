@@ -9,6 +9,7 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import ru.ruselprom.signs.data.PdfData;
 import ru.ruselprom.signs.data.UserData;
+import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +27,16 @@ public class SignatureFactory {
         this.roles = userData.getRoles();
         this.users = userData.getUsers();
         this.dates = userData.getDates();
+        checkUserData();
+    }
+
+    private void checkUserData() {
+        if (roles == null || users == null || dates == null) {
+            throw new SignaturesAppRuntimeException("userData is null");
+        }
+        if (roles.size() != users.size() || roles.size() != users.size()) {
+            throw new SignaturesAppRuntimeException("userData is fail");
+        }
     }
 
     public String signPdfDocument(PdfData pdfData) throws IOException, DocumentException {
@@ -44,7 +55,7 @@ public class SignatureFactory {
             float x;
             float y;
             int userPosition;
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < users.size(); i++) {
                 userPosition = getPositionRole(roles, i);
                 stream.setFontAndSize(bf, 12.0F);
                 x = pageSize.getRight() - 486;

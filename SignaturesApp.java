@@ -22,6 +22,13 @@ public class SignaturesApp {
             return signatureInPdf.signPdfDocument(pdfData);
         } catch (DocumentException | NullValueException | IOException | SignaturesAppRuntimeException e) {
             return e.toString();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            StringBuilder stringBuilder = new StringBuilder();
+            StackTraceElement[] stackTrace = e.getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTrace) {
+                stringBuilder.append(stackTraceElement).append("\n");
+            }
+            return stringBuilder.toString();
         }
     }
 }
