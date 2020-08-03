@@ -63,7 +63,7 @@ public class PromotionNoticeProcess {
 
     private PromotionNotice getPromotionNotice(String oid) {
         try {
-            Promotable promotable = (Promotable) (new ReferenceFactory()).getReference(oid).getObject();
+            Promotable promotable = (Promotable) new ReferenceFactory().getReference(oid).getObject();
             return getPromotionNoticeForPromotable(promotable);
         } catch (WTException e) {
             throw new SignaturesAppRuntimeException("Error receiving a promotion notice", e);
