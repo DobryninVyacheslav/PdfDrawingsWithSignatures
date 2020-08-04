@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SignatureFactory {
-    private static final String BASE_FONT = "C:\\ptc\\Windchill_11.1cps05\\eclipse\\fonts\\GOST type A.ttf";
     private static final String SINGS_PATH = "C:\\ptc\\Windchill_11.1cps05\\Windchill\\codebase\\netmarkets\\images\\sings\\";
+    private String baseFont;
     private List<RoleData> roleDataList;
     private List<String> roles;
     private List<String> users;
@@ -35,6 +35,7 @@ public class SignatureFactory {
         this.roles = userData.getRoles();
         this.users = userData.getUsers();
         this.dates = userData.getDates();
+        this.baseFont = FontPath.get();
         checkUserData();
     }
 
@@ -57,7 +58,7 @@ public class SignatureFactory {
 
             PdfContentByte stream = stamper.getOverContent(1);
             stream.beginText();
-            BaseFont bf = BaseFont.createFont(BASE_FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont bf = BaseFont.createFont(baseFont, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Rectangle pageSize = reader.getPageSize(1);
 
             float x;
