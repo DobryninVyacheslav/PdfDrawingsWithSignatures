@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import ru.ruselprom.signs.data.PdfData;
 import ru.ruselprom.signs.data.UserData;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
+import wt.org.WTUser;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,11 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SignatureFactory {
-    private static final String SINGS_PATH = "C:\\ptc\\Windchill_11.1cps05\\Windchill\\codebase\\netmarkets\\images\\sings\\";
     private String baseFont;
     private List<RoleData> roleDataList;
     private List<String> roles;
-    private List<String> users;
+    private List<WTUser> users;
     private List<String> dates;
 
     public SignatureFactory(UserData userData) {
@@ -82,13 +82,17 @@ public class SignatureFactory {
                 x = pageSize.getRight() - 486;
                 y = pageSize.getBottom() + 87 - roleData.deltaY;
                 stream.setTextMatrix(x, y);
-                stream.showText(users.get(i));
+                stream.showText(users.get(i).getLast());
 
-                Image waterMarkImage = Image.getInstance(SINGS_PATH + users.get(i) + ".png");
-                x = pageSize.getRight() - 415;
-                waterMarkImage.scaleAbsolute(25, 25);
-                waterMarkImage.setAbsolutePosition(x, (y - 10));
-                stream.addImage(waterMarkImage);
+
+                byte[] imageByteArray = SignatureImage.getByUser(users.get(i));
+                if (imageByteArray.length != 0) {
+                    Image signatureImage = Image.getInstance(imageByteArray);
+                    x = pageSize.getRight() - 415;
+                    signatureImage.scaleAbsolute(25, 25);
+                    signatureImage.setAbsolutePosition(x, (y - 10));
+                    stream.addImage(signatureImage);
+                }
 
                 stream.setFontAndSize(bf, 8.0F);
                 x = pageSize.getRight() - 380;

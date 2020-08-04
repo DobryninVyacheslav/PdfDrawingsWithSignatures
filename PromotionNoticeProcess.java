@@ -40,7 +40,7 @@ public class PromotionNoticeProcess {
             userData.addRole(DEV_ROLE);
             userData.addDate(getCreateDate(pn));
             WTUser author = (WTUser) pn.getCreator().getObject();
-            userData.addUser(author.getLast());
+            userData.addUser(author);
 
             WfProcess process = getProcessForPromotionNotice(pn);
 
@@ -54,7 +54,7 @@ public class PromotionNoticeProcess {
                 userData.addRole(ea.getActivityName());
                 WTPrincipal principal = (WTPrincipal)ea.getUserRef().getObject();
                 if (principal instanceof WTUser) {
-                    userData.addUser(((WTUser)principal).getLast());
+                    userData.addUser(((WTUser)principal));
                 }
             }
             return userData;
