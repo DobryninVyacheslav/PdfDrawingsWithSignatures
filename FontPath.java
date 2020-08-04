@@ -9,6 +9,10 @@ import java.net.URLDecoder;
 public class FontPath {
     public static final String FONT_FILE_NAME = "ГОСТ_тип_А.ttf";
 
+    private FontPath() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String get() {
         try {
             File currentClass = new File(URLDecoder.decode(FontPath.class
