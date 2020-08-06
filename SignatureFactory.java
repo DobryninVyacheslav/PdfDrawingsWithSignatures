@@ -88,9 +88,9 @@ public class SignatureFactory {
                 byte[] imageByteArray = SignatureImage.getByUser(users.get(i));
                 if (imageByteArray.length != 0) {
                     Image signatureImage = Image.getInstance(imageByteArray);
-                    x = pageSize.getRight() - 415;
-                    signatureImage.scaleAbsolute(25, 25);
-                    signatureImage.setAbsolutePosition(x, (y - 10));
+                    x = pageSize.getRight() - 424;
+                    signatureImage.scaleAbsolute(40, 13);
+                    signatureImage.setAbsolutePosition(x, (y - 2));
                     stream.addImage(signatureImage);
                 }
 
