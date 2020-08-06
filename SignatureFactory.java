@@ -78,7 +78,7 @@ public class SignatureFactory {
                     }
                 }
                 addedRoles.append(roleData.roleName);
-                stream.setFontAndSize(bf, 12.0F);
+                stream.setFontAndSize(bf, 11.0F);
                 x = pageSize.getRight() - 486;
                 y = pageSize.getBottom() + 87 - roleData.deltaY;
                 stream.setTextMatrix(x, y);
