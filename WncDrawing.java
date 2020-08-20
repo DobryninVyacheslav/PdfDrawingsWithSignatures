@@ -1,5 +1,8 @@
 package ru.ruselprom.signs;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
 import wt.epm.EPMDocument;
 import wt.epm.EPMDocumentType;
@@ -10,11 +13,13 @@ import wt.wvs.WVSLoggerHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
 public class WncDrawing {
 
     private EPMDocument drawing;
 
-    public WncDrawing(String oid) {
+    @Autowired
+    public WncDrawing(@Qualifier("oid") String oid) {
         this.drawing = getDrawingByOid(oid);
         checkDocType();
         checkLifeCycleState();

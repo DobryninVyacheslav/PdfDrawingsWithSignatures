@@ -1,10 +1,14 @@
 package ru.ruselprom.signs.data;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import java.io.InputStream;
 
 public class PdfData {
     private String pdfName;
     private String pdfPath;
+    private InputStream pdfStream;
 
     public String getPdfPath() {
         return pdfPath;
@@ -13,8 +17,6 @@ public class PdfData {
     public void setPdfPath(String pdfPath) {
         this.pdfPath = pdfPath;
     }
-
-    private InputStream pdfStream;
 
     public String getPdfName() {
         return pdfName;

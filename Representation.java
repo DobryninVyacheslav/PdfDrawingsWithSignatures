@@ -1,5 +1,7 @@
 package ru.ruselprom.signs;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.ruselprom.signs.data.PdfData;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
 import wt.content.*;
@@ -10,11 +12,13 @@ import wt.util.WTException;
 
 import java.beans.PropertyVetoException;
 
+@Component
 public class Representation {
 
     private WncDrawing drawing;
     private Persistable persRepresentation;
 
+    @Autowired
     public Representation(WncDrawing drawing) {
         this.drawing = drawing;
         this.persRepresentation = getRepresentationByOid(drawing.getRepresentationOid());

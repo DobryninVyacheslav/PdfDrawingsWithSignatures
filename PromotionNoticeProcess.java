@@ -1,9 +1,11 @@
 package ru.ruselprom.signs;
 
 import com.ptc.netmarkets.workflow.NmWorkflowHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import ru.ruselprom.signs.data.UserData;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
-import ru.ruselprom.signs.exceptions.NullValueException;
 import wt.fc.ObjectReference;
 import wt.fc.QueryResult;
 import wt.fc.ReferenceFactory;
@@ -25,16 +27,23 @@ import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
+@Component
 public class PromotionNoticeProcess {
 
     public static final String DEV_ROLE = "Разработчик";
     public static final String DATE_FORMAT = "dd.MM.yy";
+    private String drwOid;
 
-    public UserData getUserDataByOidOfDrw(String oid) throws NullValueException{
+    @Autowired
+    public PromotionNoticeProcess(@Qualifier("oid") String drwOid) {
+        this.drwOid = drwOid;
+    }
+
+    public UserData getUserData() {
         try {
-            PromotionNotice pn = getPromotionNotice(oid);
+            PromotionNotice pn = getPromotionNotice(drwOid);
             if (pn == null) {
-                throw new NullValueException("Чертеж утвержден не через запрос на продвижение!");
+                throw new SignaturesAppRuntimeException("Чертеж утвержден не через запрос на продвижение!");
             }
             UserData userData = new UserData();
             userData.addRole(DEV_ROLE);
@@ -113,9 +122,9 @@ public class PromotionNoticeProcess {
         }
     }
 
-    private String getCreateDate(WTObject wtObject) throws NullValueException {
+    private String getCreateDate(WTObject wtObject) {
         if (wtObject == null) {
-            throw new NullValueException("VotingEvent is null");
+            throw new SignaturesAppRuntimeException("VotingEvent is null");
         } else {
             return wtObject.getCreateTimestamp().toLocalDateTime()
                     .toLocalDate().format(DateTimeFormatter.ofPattern(DATE_FORMAT));

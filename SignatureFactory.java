@@ -8,6 +8,10 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.ruselprom.signs.data.PdfData;
 import ru.ruselprom.signs.data.UserData;
 import ru.ruselprom.signs.exceptions.SignaturesAppRuntimeException;
@@ -19,19 +23,36 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class SignatureFactory {
     private String baseFont;
+    private PdfData pdfData;
     private List<RoleData> roleDataList;
     private List<String> roles;
     private List<WTUser> users;
     private List<String> dates;
+    @Value("${signatureApp.signatureWidth}")
+    private float signatureWidth;
+    @Value("${signatureApp.signatureHeight}")
+    private float signatureHeight;
+    @Value("${signatureApp.signatureRightIndent}")
+    private float signatureRightIndent;
+    @Value("${signatureApp.signatureBottomIndent}")
+    private float signatureBottomIndent;
 
-    public SignatureFactory(UserData userData) {
+    @Autowired
+
+    public SignatureFactory(PromotionNoticeProcess process, Representation representation,
+                            @Qualifier("filePath") String filePath) {
         roleDataList = Arrays.asList(new RoleData(PromotionNoticeProcess.DEV_ROLE,0),
                                      new RoleData("Проверить",14),
                                      new RoleData("Согласовать",27),
                                      new RoleData("Нормоконтроль",56),
                                      new RoleData("Утвердить",70));
+
+        UserData userData = process.getUserData();
+        this.pdfData = representation.getDrwPdfData();
+        this.pdfData.setPdfPath(filePath);
         this.roles = userData.getRoles();
         this.users = userData.getUsers();
         this.dates = userData.getDates();
@@ -48,7 +69,7 @@ public class SignatureFactory {
         }
     }
 
-    public String signPdfDocument(PdfData pdfData) throws IOException, DocumentException {
+    public String signPdfDocument() throws IOException, DocumentException {
         PdfReader reader = null;
         PdfStamper stamper = null;
         try {
@@ -78,7 +99,7 @@ public class SignatureFactory {
                     }
                 }
                 addedRoles.append(roleData.roleName);
-                stream.setFontAndSize(bf, 11.0F);
+                stream.setFontAndSize(bf, 12.0F);
                 x = pageSize.getRight() - 486;
                 y = pageSize.getBottom() + 87 - roleData.deltaY;
                 stream.setTextMatrix(x, y);
@@ -88,9 +109,9 @@ public class SignatureFactory {
                 byte[] imageByteArray = SignatureImage.getByUser(users.get(i));
                 if (imageByteArray.length != 0) {
                     Image signatureImage = Image.getInstance(imageByteArray);
-                    x = pageSize.getRight() - 424;
-                    signatureImage.scaleAbsolute(40, 13);
-                    signatureImage.setAbsolutePosition(x, (y - 2));
+                    x = pageSize.getRight() - signatureRightIndent;
+                    signatureImage.scaleAbsolute(signatureWidth, signatureHeight);
+                    signatureImage.setAbsolutePosition(x, (y - signatureBottomIndent));
                     stream.addImage(signatureImage);
                 }
 
