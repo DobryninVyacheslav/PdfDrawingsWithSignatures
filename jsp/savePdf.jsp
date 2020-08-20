@@ -21,8 +21,8 @@
 		String oid = request.getParameter("oid").toString();
 		String filePath = "D:\\Ruselprom\\Projects\\pdf with signs\\";
 		out.println(oid);
-		SignsApp signsApp = new SignsApp();
-		String result = signsApp.start(oid, filePath);
+		SignaturesApp signaturesApp  = new SignaturesApp();
+		String result = signaturesApp.start(oid, filePath);
 		out.println("<br><h1>" + result + "<h1>");
 	%>
  </body>
